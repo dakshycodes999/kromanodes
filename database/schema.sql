@@ -20,7 +20,7 @@ create table public.users (
     invite_count integer default 0 check (invite_count >= 0),
     ram_limit_mb integer default 2048, -- Starts at 2GB
     max_server_slots integer default 1, -- Starts with 1 server slot
-    claimedMilestones integer[] default '{}',
+    claimed_milestones integer[] default '{}',
     created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 

@@ -110,7 +110,7 @@ app.post('/api/auth/register', async (req, res) => {
             password_hash: passwordHash,
             ram_limit_mb: 2048,      // 2GB starting allocation
             max_server_slots: 1,     // 1 starting server slot
-            claimedMilestones: []
+            claimed_milestones: []
         }).select().single();
 
         if (dbErr) {
@@ -195,7 +195,7 @@ app.get('/api/user/me', authenticateToken, async (req, res) => {
     try {
         const { data: userData, error } = await supabase
             .from('users')
-            .select('id, username, email, coins, invite_count, ram_limit_mb, max_server_slots, claimedMilestones')
+            .select('id, username, email, coins, invite_count, ram_limit_mb, max_server_slots, claimed_milestones')
             .eq('id', req.user.id)
             .single();
 
@@ -397,7 +397,7 @@ app.post('/api/rewards/claim', authenticateToken, async (req, res) => {
             return res.status(403).json({ error: `Inadequate invites count. You have ${user.invite_count}, required: ${milestone}.` });
         }
 
-        if (user.claimedMilestones && user.claimedMilestones.includes(milestone)) {
+        if (user.claimed_milestones && user.claimed_milestones.includes(milestone)) {
             return res.status(400).json({ error: 'Milestone rewards already claimed.' });
         }
 
@@ -411,12 +411,12 @@ app.post('/api/rewards/claim', authenticateToken, async (req, res) => {
         const reward = milestones[milestone];
         if (!reward) return res.status(400).json({ error: 'Invalid milestone request.' });
 
-        const updatedClaimed = [...(user.claimedMilestones || []), milestone];
+        const updatedClaimed = [...(user.claimed_milestones || []), milestone];
         const newRamLimit = user.ram_limit_mb + reward.ram;
         const newSlotsLimit = user.max_server_slots + reward.slots;
 
         await supabase.from('users').update({
-            claimedMilestones: updatedClaimed,
+            claimed_milestones: updatedClaimed,
             ram_limit_mb: newRamLimit,
             max_server_slots: newSlotsLimit
         }).eq('id', req.user.id);

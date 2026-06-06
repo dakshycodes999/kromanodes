@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         invites: userData.invite_count || 0,
                         ramLimit: userData.ram_limit_mb || 2048,
                         maxSlots: userData.max_server_slots || 1,
-                        claimedMilestones: userData.claimedMilestones || []
+                        claimedMilestones: userData.claimed_milestones || []
                     };
                     
                     // Fetch real user servers
