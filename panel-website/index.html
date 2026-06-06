@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KromaNodes - Client Panel</title>
+    <meta name="description" content="Manage your free KromaNodes Minecraft servers, check your invite rewards, and deploy new nodes.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body">
+
+    <!-- Custom Credentials Login & Register Screen -->
+    <div class="login-screen" id="login-screen">
+        <div class="login-card glass">
+            <div class="login-logo">
+                <i class="fa-solid fa-cube logo-icon"></i>
+                <h2>Kroma<span>Nodes</span></h2>
+                <p>CONTROL PANEL</p>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form">
+                <h3 class="auth-form-title" style="margin-bottom: 20px; font-family: var(--font-heading); font-size: 1.25rem;">Sign In</h3>
+                <div class="form-group" style="text-align: left; margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px;">
+                    <label for="login-email" style="font-size: 0.75rem;">Email Address</label>
+                    <input type="email" id="login-email" placeholder="client@example.com" required style="background: #0f0b21; border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 8px; color: #fff;">
+                </div>
+                <div class="form-group" style="text-align: left; margin-bottom: 24px; display: flex; flex-direction: column; gap: 6px;">
+                    <label for="login-password" style="font-size: 0.75rem;">Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required style="background: #0f0b21; border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 8px; color: #fff;">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full" id="btn-submit-login">Sign In</button>
+                <p class="auth-toggle-text" style="margin-top: 16px; font-size: 0.85rem; color: var(--text-secondary);">Don't have an account? <a href="#" id="link-to-register" style="color: var(--primary); font-weight: 600;">Create Account</a></p>
+            </form>
+
+            <!-- Register Form (Hidden initially) -->
+            <form id="register-form" class="auth-form hidden">
+                <h3 class="auth-form-title" style="margin-bottom: 20px; font-family: var(--font-heading); font-size: 1.25rem;">Create Account</h3>
+                <div class="form-group" style="text-align: left; margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px;">
+                    <label for="register-username" style="font-size: 0.75rem;">Client Username</label>
+                    <input type="text" id="register-username" placeholder="e.g. Steve" required style="background: #0f0b21; border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 8px; color: #fff;">
+                </div>
+                <div class="form-group" style="text-align: left; margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px;">
+                    <label for="register-email" style="font-size: 0.75rem;">Email Address</label>
+                    <input type="email" id="register-email" placeholder="client@example.com" required style="background: #0f0b21; border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 8px; color: #fff;">
+                </div>
+                <div class="form-group" style="text-align: left; margin-bottom: 24px; display: flex; flex-direction: column; gap: 6px;">
+                    <label for="register-password" style="font-size: 0.75rem;">Password (min 6 chars)</label>
+                    <input type="password" id="register-password" placeholder="••••••••" required style="background: #0f0b21; border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 8px; color: #fff;">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full" id="btn-submit-register">Sign Up</button>
+                <p class="auth-toggle-text" style="margin-top: 16px; font-size: 0.85rem; color: var(--text-secondary);">Already have an account? <a href="#" id="link-to-login" style="color: var(--primary); font-weight: 600;">Sign In</a></p>
+            </form>
+
+            <div class="login-footer" style="margin-top: 24px;">
+                <a href="/"><i class="fa-solid fa-arrow-left"></i> Back to Homepage</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Panel Dashboard (Hidden initially, shown after login) -->
+    <div class="panel-layout hidden" id="panel-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-cube brand-icon"></i>
+                <span>Kroma<span>Nodes</span></span>
+            </div>
+            
+            <div class="user-profile-badge">
+                <img src="https://cdn.discordapp.com/embed/avatars/1.png" alt="Discord Avatar" id="user-avatar" class="avatar">
+                <div class="user-info">
+                    <span class="user-name" id="user-username">Player#0001</span>
+                    <span class="user-role">Client</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#overview" class="nav-item active" id="tab-link-overview">
+                    <i class="fa-solid fa-server"></i> <span>My Servers</span>
+                </a>
+                <a href="#create" class="nav-item" id="tab-link-create">
+                    <i class="fa-solid fa-circle-plus"></i> <span>Create Server</span>
+                </a>
+                <a href="#rewards" class="nav-item" id="tab-link-rewards">
+                    <i class="fa-solid fa-gift"></i> <span>Invite Rewards</span>
+                    <span class="badge-count" id="nav-invite-badge">0</span>
+                </a>
+                <a href="#console" class="nav-item" id="tab-link-console">
+                    <i class="fa-solid fa-terminal"></i> <span>Server Console</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-logout" id="btn-logout">
+                    <i class="fa-solid fa-right-from-bracket"></i> <span>Sign Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="panel-header">
+                <div class="header-left">
+                    <h1 id="page-title">My Servers</h1>
+                    <p class="text-secondary" id="page-subtitle">Manage and monitor your deployed nodes.</p>
+                </div>
+                <div class="header-right">
+                    <div class="resource-pill">
+                        <i class="fa-solid fa-microchip text-cyan"></i>
+                        <span>RAM: <strong id="allocated-ram-display">0MB</strong> / <span id="max-ram-display">2048MB</span></span>
+                    </div>
+                    <div class="resource-pill">
+                        <i class="fa-solid fa-layer-group text-purple"></i>
+                        <span>Slots: <strong id="allocated-slots-display">0</strong> / <span id="max-slots-display">1</span></span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- TAB 1: OVERVIEW -->
+            <section class="tab-pane active" id="tab-overview">
+                <!-- Stat Cards -->
+                <div class="panel-stats-grid">
+                    <div class="panel-stat-card glass">
+                        <div class="stat-icon-wrap bg-cyan-glow">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>RAM Allocation</h3>
+                            <p id="stat-ram-text">0 MB / 2048 MB</p>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill bg-cyan" id="ram-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel-stat-card glass">
+                        <div class="stat-icon-wrap bg-purple-glow">
+                            <i class="fa-solid fa-hard-drive"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Disk Allocation</h3>
+                            <p id="stat-disk-text">0 GB / 5.0 GB</p>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill bg-purple" id="disk-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="panel-stat-card glass">
+                        <div class="stat-icon-wrap bg-green-glow">
+                            <i class="fa-solid fa-user-group"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Total Invites</h3>
+                            <p id="stat-invites-text">0 Invites</p>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill bg-green" id="invites-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Servers List Section -->
+                <div class="servers-section">
+                    <div class="section-title-row">
+                        <h2>Active Servers</h2>
+                        <button class="btn btn-primary btn-sm" id="btn-quick-create">
+                            <i class="fa-solid fa-plus"></i> Create New
+                        </button>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div class="empty-servers glass hidden" id="empty-servers">
+                        <i class="fa-solid fa-folder-open empty-icon"></i>
+                        <h3>No Servers Found</h3>
+                        <p>You haven't created any Minecraft servers yet. Launch one now with your free 2GB allocation.</p>
+                        <button class="btn btn-primary" id="btn-create-first-server">
+                            <i class="fa-solid fa-circle-plus"></i> Create Server
+                        </button>
+                    </div>
+
+                    <!-- Servers Grid -->
+                    <div class="servers-grid" id="servers-grid">
+                        <!-- Server Card Template (Generated by JS) -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: CREATE SERVER -->
+            <section class="tab-pane" id="tab-create">
+                <div class="form-container glass">
+                    <form id="create-server-form">
+                        <h2 class="form-title">Create Minecraft Server</h2>
+                        <p class="form-subtitle text-secondary">Set up your premium node. Resources will be checked against your account limit.</p>
+                        
+                        <div class="form-group">
+                            <label for="srv-name">Server Name</label>
+                            <input type="text" id="srv-name" placeholder="e.g. My Survival Server" required max="20">
+                            <span class="help-text">Enter a unique name for your server.</span>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="srv-egg">Server Software</label>
+                                <select id="srv-egg">
+                                    <option value="paper">Paper MC (Highly Optimized)</option>
+                                    <option value="purpur">Purpur MC (Advanced Config)</option>
+                                    <option value="vanilla">Vanilla Minecraft (Default)</option>
+                                    <option value="forge">Forge (Modded Server)</option>
+                                    <option value="fabric">Fabric (Lightweight Modded)</option>
+                                    <option value="bungeecord">BungeeCord (Proxy Server)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="srv-version">Minecraft Version</label>
+                                <select id="srv-version">
+                                    <option value="1.20.4">1.20.4 (Recommended)</option>
+                                    <option value="1.20.2">1.20.2</option>
+                                    <option value="1.19.4">1.19.4</option>
+                                    <option value="1.18.2">1.18.2</option>
+                                    <option value="1.16.5">1.16.5</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="srv-ram">RAM Allocation (MB)</label>
+                                <div class="slider-container">
+                                    <input type="range" id="srv-ram" min="1024" max="2048" step="128" value="2048">
+                                    <span class="slider-value" id="srv-ram-val">2048 MB</span>
+                                </div>
+                                <span class="help-text">Limit based on your total earned RAM.</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="srv-disk">Disk Storage (GB)</label>
+                                <div class="slider-container">
+                                    <input type="range" id="srv-disk" min="2" max="5" step="1" value="5">
+                                    <span class="slider-value" id="srv-disk-val">5 GB</span>
+                                </div>
+                                <span class="help-text">Storage space for world files & plugins.</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="btn-submit-create">
+                                <i class="fa-solid fa-circle-plus"></i> Deploy Server
+                            </button>
+                            <button type="button" class="btn btn-outline" id="btn-cancel-create">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- TAB 3: INVITE REWARDS -->
+            <section class="tab-pane" id="tab-rewards">
+                <!-- Invite Info Row -->
+                <div class="invite-stats-banner glass">
+                    <div class="invite-stat-item">
+                        <span class="lbl text-secondary">Your Active Invites</span>
+                        <span class="val text-gradient" id="rewards-invite-count">0</span>
+                    </div>
+                    <div class="invite-stat-item">
+                        <span class="lbl text-secondary">Current RAM Capacity</span>
+                        <span class="val text-gradient" id="rewards-ram-cap">2.0 GB</span>
+                    </div>
+                    <div class="invite-link-box">
+                        <span class="lbl text-secondary">Your Referral Link</span>
+                        <div class="copy-input-group">
+                            <input type="text" id="referral-link" value="https://discord.gg/inviteCode" readonly>
+                            <button class="btn btn-secondary btn-sm" id="btn-copy-referral">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Tools (For Testing) -->
+                <div class="simulation-alert glass">
+                    <div class="sim-content">
+                        <h4><i class="fa-solid fa-vial"></i> Dashboard Testing Tools</h4>
+                        <p>Simulate inviting friends to your Discord server to test the invite rewards and server scaling system.</p>
+                    </div>
+                    <div class="sim-actions">
+                        <button class="btn btn-secondary btn-sm" id="btn-sim-invite">
+                            <i class="fa-solid fa-plus"></i> Invite 1 Friend
+                        </button>
+                        <button class="btn btn-secondary btn-sm" id="btn-sim-reset">
+                            <i class="fa-solid fa-rotate-left"></i> Reset Invites
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Rewards List Grid -->
+                <div class="rewards-list-container">
+                    <h2>Available Upgrades</h2>
+                    <p class="text-secondary mb-4">Milestones are unlocked automatically when you reach the required Discord invite count.</p>
+                    
+                    <div class="rewards-grid" id="rewards-grid">
+                        <!-- Rewards generated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: SERVER CONSOLE -->
+            <section class="tab-pane" id="tab-console">
+                <div class="console-layout">
+                    <!-- Console Main Panel -->
+                    <div class="console-main glass">
+                        <!-- Server selector in header -->
+                        <div class="console-header">
+                            <div class="active-server-info">
+                                <span class="status-indicator online" id="console-status-indicator"></span>
+                                <h3 id="console-server-name">No Server Selected</h3>
+                            </div>
+                            <div class="console-actions">
+                                <button class="btn btn-action start" id="btn-console-start" title="Start Server">
+                                    <i class="fa-solid fa-play"></i> Start
+                                </button>
+                                <button class="btn btn-action restart" id="btn-console-restart" title="Restart Server">
+                                    <i class="fa-solid fa-rotate-right"></i> Restart
+                                </button>
+                                <button class="btn btn-action stop" id="btn-console-stop" title="Stop Server">
+                                    <i class="fa-solid fa-square"></i> Stop
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Console Logs Screen -->
+                        <div class="console-terminal" id="console-terminal">
+                            <div class="terminal-line system">[System] Connection established with Node-01.</div>
+                            <div class="terminal-line system">[System] Loading terminal session...</div>
+                        </div>
+
+                        <!-- Command Input -->
+                        <div class="console-input-row">
+                            <span class="prompt">$</span>
+                            <input type="text" id="console-cmd-input" placeholder="Type minecraft server command here (e.g. op Player, gamemode creative)..." disabled>
+                            <button class="btn btn-secondary btn-sm" id="btn-send-cmd" disabled>Send</button>
+                        </div>
+                    </div>
+
+                    <!-- Console Side Panel (Resource graphs) -->
+                    <div class="console-side">
+                        <div class="side-widget glass">
+                            <h3>RAM Usage</h3>
+                            <div class="widget-progress-circle">
+                                <svg width="120" height="120" viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="50" class="circle-bg"></circle>
+                                    <circle cx="60" cy="60" r="50" class="circle-fill" id="ram-circle-fill"></circle>
+                                </svg>
+                                <span class="circle-value" id="console-ram-percent">0%</span>
+                            </div>
+                            <p class="text-center" id="console-ram-text">0 MB / 0 MB</p>
+                        </div>
+
+                        <div class="side-widget glass">
+                            <h3>CPU Usage</h3>
+                            <div class="widget-progress-circle">
+                                <svg width="120" height="120" viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="50" class="circle-bg"></circle>
+                                    <circle cx="60" cy="60" r="50" class="circle-fill" id="cpu-circle-fill"></circle>
+                                </svg>
+                                <span class="circle-value" id="console-cpu-percent">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Custom Script -->
+    <script src="app.js"></script>
+</body>
+</html>

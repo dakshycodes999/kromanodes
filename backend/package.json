@@ -1,0 +1,31 @@
+{
+  "name": "kromanodes-backend",
+  "version": "1.0.0",
+  "description": "Production Node.js/Express API backend for KromaNodes Minecraft Hosting (Custom Auth)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.4",
+    "axios": "^1.6.2",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "pterodactyl-api",
+    "minecraft-hosting",
+    "express-backend",
+    "custom-auth"
+  ],
+  "author": "KromaNodes Team",
+  "license": "ISC"
+}

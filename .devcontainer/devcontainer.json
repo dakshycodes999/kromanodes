@@ -1,0 +1,43 @@
+{
+  "name": "KromaNodes Development Environment",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye",
+  
+  // Forward ports to make web servers accessible publicly via Github Codespaces
+  "forwardPorts": [8000, 8080, 3000, 25565],
+  
+  "portsAttributes": {
+    "8000": {
+      "label": "Landing Website",
+      "onAutoForward": "notify",
+      "visibility": "public"
+    },
+    "8080": {
+      "label": "Client Panel",
+      "onAutoForward": "notify",
+      "visibility": "public"
+    },
+    "3000": {
+      "label": "Backend API",
+      "onAutoForward": "silent",
+      "visibility": "public"
+    },
+    "25565": {
+      "label": "Local Minecraft Server",
+      "onAutoForward": "silent",
+      "visibility": "public"
+    }
+  },
+
+  // Run install scripts after the container is created
+  "postCreateCommand": "bash .devcontainer/postCreate.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ritwickdey.LiveServer"
+      ]
+    }
+  }
+}

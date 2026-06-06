@@ -1,0 +1,22 @@
+{
+  "name": "kromanodes-invite-bot",
+  "version": "1.0.0",
+  "description": "Discord Invite Tracker Bot for KromaNodes Minecraft Hosting",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.4",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "invite-tracker",
+    "minecraft-hosting"
+  ],
+  "author": "KromaNodes Team",
+  "license": "ISC"
+}

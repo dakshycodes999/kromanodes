@@ -1,0 +1,13 @@
+# Ignore environment secret files
+.env
+backend/.env
+discord-bot/.env
+
+# Ignore node modules
+node_modules/
+backend/node_modules/
+discord-bot/node_modules/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
